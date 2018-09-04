@@ -2,6 +2,8 @@ FROM ubuntu:bionic
 
 COPY ./*.sh /
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 RUN set -eux && \
     apt-get update && \
 #    apt-get upgrade -y && \
@@ -21,9 +23,8 @@ RUN mkdir /tmp/opencv && \
     ./build-opencv.sh && \
     cd / && rm -rf /tmp/*
 
-RUN mkdir /opt/waifu2x-cpp && \
-    mv /build.sh /opt/waifu2x-cpp/ && \
-    cd /opt/waifu2x-cpp && \
+RUN mv /build.sh /opt/ && \
+    cd /opt && \
     ./build.sh
 
 
@@ -35,7 +36,7 @@ RUN mkdir /opt/waifu2x-cpp && \
 #     (cd /opt/waifu2x-converter-cpp.git && ./build.sh)
 
 VOLUME /srv/waifu2x
-WORKDIR /srv/waifu2x
+WORKDIR /opt/waifu2x
 
 # usage: waifu2x -i hoge.png
 
