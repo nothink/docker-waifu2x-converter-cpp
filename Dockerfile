@@ -6,7 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN set -eux && \
     apt-get update && \
-#    apt-get upgrade -y && \
+    apt-get upgrade -y && \
     apt-get install -y build-essential wget git && \
     apt-get install -y libclc-dev opencl-headers && \
     apt-get install -y cmake && \
@@ -36,7 +36,7 @@ RUN mv /build.sh /opt/ && \
 #     (cd /opt/waifu2x-converter-cpp.git && ./build.sh)
 
 VOLUME /srv/waifu2x
-WORKDIR /opt/waifu2x
+WORKDIR /opt/waifu2x-cpp
 
 # usage: waifu2x -i hoge.png
 
