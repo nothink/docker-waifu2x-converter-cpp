@@ -21,8 +21,8 @@ RUN apk add --update --no-cache musl libstdc++ && \
 # remove pkgs
     apk del --purge .builddeps
 
-VOLUME /srv/waifu2x
 WORKDIR /opt/waifu2x-cpp
 
 # usage: waifu2x -i hoge.png -o moge.png
-ENTRYPOINT /opt/waifu2x-cpp/waifu2x-converter-cpp $@
+ENTRYPOINT ["/opt/waifu2x-cpp/waifu2x-converter-cpp"]
+CMD ["--help"]
