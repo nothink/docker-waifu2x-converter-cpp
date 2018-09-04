@@ -2,21 +2,24 @@ FROM alpine:3.8
 
 COPY ./*.sh /
 
-RUN apk --update --no-cache add \
-        build-base gcc make wget git cmake linux-headers opencl-headers
-
-RUN mkdir /tmp/opencv && \
+# install pkgs
+RUN apk add --update --no-cache musl libstdc++ && \
+    apk add --no-cache --virtual .builddeps \
+        build-base gcc make wget git cmake linux-headers opencl-headers && \
+# build opencv
+    mkdir /tmp/opencv && \
     mv /build-opencv.sh /tmp/opencv/ && \
     cd /tmp/opencv && \
     ./build-opencv.sh && \
-    cd / && rm -rf /tmp/*
-
-RUN ln -sf /usr/lib64/*.3.4 /usr/lib/
-
-RUN mkdir /opt && \
+    cd / && rm -rf /tmp/* && \
+    ln -sf /usr/lib64/*.3.4 /usr/lib/ && \
+# build waifu2x-cpp
+    mkdir /opt && \
     mv /build.sh /opt/ && \
     cd /opt && \
-    ./build.sh
+    ./build.sh && \
+# remove pkgs
+    apk del --purge .builddeps
 
 VOLUME /srv/waifu2x
 WORKDIR /opt/waifu2x-cpp
