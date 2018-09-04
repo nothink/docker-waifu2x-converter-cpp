@@ -1,21 +1,9 @@
-FROM ubuntu:bionic
+FROM alpine:3.8
 
 COPY ./*.sh /
 
-ENV DEBIAN_FRONTEND=noninteractive
-
-RUN set -eux && \
-    apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y build-essential wget git && \
-    apt-get install -y libclc-dev opencl-headers && \
-    apt-get install -y cmake && \
-    apt-get clean
-
-# RUN mkdir /tmp/cmake38 && \
-#     mv /build-cmake38.sh /tmp/cmake38/ && \
-#     cd /tmp/cmake38 && \
-#     ./build-cmake38.sh
+RUN apk --update --no-cache add \
+        build-base gcc make wget git cmake linux-headers opencl-headers
 
 RUN mkdir /tmp/opencv && \
     mv /build-opencv.sh /tmp/opencv/ && \
@@ -23,21 +11,15 @@ RUN mkdir /tmp/opencv && \
     ./build-opencv.sh && \
     cd / && rm -rf /tmp/*
 
-RUN mv /build.sh /opt/ && \
+RUN ln -sf /usr/lib64/*.3.4 /usr/lib/
+
+RUN mkdir /opt && \
+    mv /build.sh /opt/ && \
     cd /opt && \
     ./build.sh
-
-
-#RUN cd /opt/waifu2x-converter-cpp.git && \
-#    sh ./build.sh
-
-# RUN set -eux &&\
-#     git clone https://github.com/khws4v1/waifu2x-converter-cpp.git /opt/waifu2x-converter-cpp.git &&\
-#     (cd /opt/waifu2x-converter-cpp.git && ./build.sh)
 
 VOLUME /srv/waifu2x
 WORKDIR /opt/waifu2x-cpp
 
-# usage: waifu2x -i hoge.png
-
+# usage: waifu2x -i hoge.png -o moge.png
 ENTRYPOINT /opt/waifu2x-cpp/waifu2x-converter-cpp $@
