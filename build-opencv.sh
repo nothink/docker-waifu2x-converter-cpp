@@ -10,5 +10,5 @@ mkdir cmake_tmp
 cd cmake_tmp
 cmake -DCMAKE_INSTALL_PREFIX=/usr ../src
 # make and make install
-make
+make -j`nproc`
 make install
