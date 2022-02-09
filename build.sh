@@ -4,4 +4,4 @@ set -eux && git clone https://github.com/DeadSix27/waifu2x-converter-cpp /opt/wa
 
 cd /opt/waifu2x-cpp
 cmake .
-make
+make -j`nproc`
